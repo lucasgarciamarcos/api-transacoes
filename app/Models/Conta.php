@@ -30,8 +30,10 @@ class Conta extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-
-        $this->saldo = number_format($this->saldo, 2);
+        
+        if (is_numeric($this->saldo)) {
+            $this->saldo = number_format($this->saldo, 2, '.', '');
+        }
     }
 
     /**

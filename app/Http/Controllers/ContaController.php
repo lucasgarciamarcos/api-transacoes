@@ -21,7 +21,7 @@ class ContaController extends Controller
     {
         $this->validate($request, [
             'conta_id' => 'required',
-            'valor' => 'required',
+            'valor' => 'required|numeric',
         ]);
 
         $conta = Conta::where('conta_id', $request->conta_id)->first();
