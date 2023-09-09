@@ -16,3 +16,8 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->post('/list', 'ContaController@list');
+$router->post('/conta', 'ContaController@create');
+$router->get('/conta', 'ContaController@get');
+$router->get('/transacao', 'TransacaoController@operate');
