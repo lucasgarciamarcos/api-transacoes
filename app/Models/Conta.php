@@ -8,7 +8,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 
 class Conta extends Model
-{    
+{
     use HasFactory;
 
     protected $table = 'contas';
@@ -30,7 +30,7 @@ class Conta extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        
+
         if (is_numeric($this->saldo)) {
             $this->saldo = number_format($this->saldo, 2, '.', '');
         }

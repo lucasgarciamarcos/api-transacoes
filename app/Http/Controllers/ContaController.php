@@ -7,6 +7,12 @@ use App\Models\Conta;
 
 class ContaController extends Controller
 {
+    /**
+     * Lista todas as contas ou filtra por pesquisa (opcional).
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function list(Request $request)
     {
         $this->validate($request, [
@@ -17,6 +23,12 @@ class ContaController extends Controller
         return response()->json($contas);
     }
 
+    /**
+     * Cria uma nova conta ou atualiza o saldo de uma conta existente.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request)
     {
         $this->validate($request, [
@@ -28,8 +40,8 @@ class ContaController extends Controller
 
         if ($conta) {
             // Prepara o objeto conta para a entrega
-            $conta = New Conta($conta->toArray());
-            
+            $conta = new Conta($conta->toArray());
+
             return response()->json([
                 'conta_id' => $conta->conta_id,
                 'saldo' => $conta->saldo
@@ -49,11 +61,17 @@ class ContaController extends Controller
         ], 201);
     }
 
+    /**
+     * Obtém informações de uma conta pelo ID.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function get(Request $request)
     {
         $conta_id = $request->query('id');
 
-        if(!ctype_digit($conta_id)) {
+        if (!ctype_digit($conta_id)) {
             return response()->json(['error' => 'Parâmetro "id" é do tipo integer e obrigatório.'], 400);
         }
 
@@ -71,6 +89,11 @@ class ContaController extends Controller
         ], 200);
     }
 
+    /**
+     * Cria uma nova conta com um saldo inicial de 500.00.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function quinhentos()
     {
         // Em um banco como mySQL daria pra fazer desta forma mas vou utilizar uma forma mais simples por se tratar de sqlite
