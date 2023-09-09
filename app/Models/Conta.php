@@ -22,11 +22,6 @@ class Conta extends Model
         'saldo', 'conta_id'
     ];
 
-    public static $rules = [
-        'conta_id' => 'unique:contas',
-        'saldo' => 'required|numeric|min:0',
-    ];
-
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -34,6 +29,14 @@ class Conta extends Model
         if (is_numeric($this->saldo)) {
             $this->saldo = number_format($this->saldo, 2, '.', '');
         }
+    }
+
+    public static function getRules()
+    {
+        return [
+            'conta_id'  => 'unique:contas',
+            'saldo'     => 'required|numeric|min:0',
+        ];
     }
 
     /**
@@ -58,7 +61,7 @@ class Conta extends Model
      */
     public static function validarAtributos(Conta $conta)
     {
-        $validator = Validator::make($conta->toArray(), self::$rules);
+        $validator = Validator::make($conta->toArray(), self::getRules());
 
         if ($validator->fails()) {
             throw new ValidationException($validator);

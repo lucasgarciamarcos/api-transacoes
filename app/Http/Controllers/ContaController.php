@@ -31,10 +31,7 @@ class ContaController extends Controller
      */
     public function create(Request $request)
     {
-        $this->validate($request, [
-            'conta_id' => 'required',
-            'valor' => 'required|numeric',
-        ]);
+        $this->validate($request, Conta::getRules());
 
         $conta = Conta::where('conta_id', $request->conta_id)->first();
 
@@ -43,21 +40,21 @@ class ContaController extends Controller
             $conta = new Conta($conta->toArray());
 
             return response()->json([
-                'conta_id' => $conta->conta_id,
-                'saldo' => $conta->saldo
+                'conta_id'  => $conta->conta_id,
+                'saldo'     => $conta->saldo
             ], 201);
         }
 
         $conta = new Conta([
-            'conta_id' => $request->conta_id,
-            'saldo' => $request->valor
+            'conta_id'  => $request->conta_id,
+            'saldo'     => $request->valor
         ]);
 
         $conta = Conta::criar($conta);
 
         return response()->json([
-            'conta_id' => $conta->conta_id,
-            'saldo' => $conta->saldo
+            'conta_id'  => $conta->conta_id,
+            'saldo'     => $conta->saldo
         ], 201);
     }
 
@@ -84,8 +81,8 @@ class ContaController extends Controller
         $conta = new Conta($conta->toArray());
 
         return response()->json([
-            'conta_id' => $conta->conta_id,
-            'saldo' => $conta->saldo
+            'conta_id'  => $conta->conta_id,
+            'saldo'     => $conta->saldo
         ], 200);
     }
 
@@ -113,15 +110,15 @@ class ContaController extends Controller
         }
 
         $conta = new Conta([
-            'conta_id' => $menorContaId,
-            'saldo' => 500.00
+            'conta_id'  => $menorContaId,
+            'saldo'     => 500.00
         ]);
 
         $conta = Conta::criar($conta);
 
         return response()->json([
-            'conta_id' => $conta->conta_id,
-            'saldo' => $conta->saldo
+            'conta_id'  => $conta->conta_id,
+            'saldo'     => $conta->saldo
         ], 201);
     }
 }
