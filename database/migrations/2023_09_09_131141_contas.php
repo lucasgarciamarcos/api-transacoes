@@ -14,7 +14,8 @@ class Contas extends Migration
     public function up()
     {
         Schema::create('contas', function (Blueprint $table) {
-            $table->id('conta_id');
+            $table->id();
+            $table->integer('conta_id')->unique();
             $table->float('saldo');
             $table->timestamps();
         });
