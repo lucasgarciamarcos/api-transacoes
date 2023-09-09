@@ -12,7 +12,7 @@ class Transacao extends Model
     use HasFactory;
     
     protected $table = 'transacoes';
-
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -21,16 +21,19 @@ class Transacao extends Model
     protected $fillable = [
         'conta_id', 'valor', 'forma_pagamento'
     ];
+    
+    public static $rules = [
+        'conta_id' => 'required',
+        'valor' => 'required|numeric',
+        'forma_pagamento' => 'required|string',
+    ];
+
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
-        $validator = Validator::make($attributes, [
-            'conta_id' => 'required',
-            'valor' => 'required|numeric',
-            'forma_pagamento' => 'required|string',
-        ]);
+        $validator = Validator::make($attributes, self::$rules);
 
         if ($validator->fails()) {
             throw new ValidationException($validator);

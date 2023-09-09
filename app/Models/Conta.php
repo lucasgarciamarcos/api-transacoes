@@ -12,7 +12,6 @@ class Conta extends Model
     use HasFactory;
 
     protected $table = 'contas';
-    protected $primaryKey = 'conta_id';
 
     /**
      * The attributes that are mass assignable.
@@ -20,8 +19,20 @@ class Conta extends Model
      * @var array
      */
     protected $fillable = [
-        'saldo'
+        'saldo', 'conta_id'
     ];
+
+    public static $rules = [
+        'conta_id' => 'unique:contas',
+        'saldo' => 'required|numeric|min:0',
+    ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->saldo = number_format($this->saldo, 2);
+    }
 
     /**
      * Método para criar uma nova conta e validar os atributos.
@@ -45,13 +56,7 @@ class Conta extends Model
      */
     public static function validarAtributos(Conta $conta)
     {
-        $attributes = [
-            'saldo' => $conta->saldo,
-        ];
-
-        $validator = Validator::make($attributes, [
-            'saldo' => 'required|numeric',
-        ]);
+        $validator = Validator::make($conta->toArray(), self::$rules);
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
