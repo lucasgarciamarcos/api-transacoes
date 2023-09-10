@@ -31,7 +31,10 @@ class ContaController extends Controller
      */
     public function create(Request $request)
     {
-        $this->validate($request, Conta::getRules());
+        $this->validate($request, [
+            'conta_id'  => 'numeric|min:0',
+            'valor'     => 'numeric|min:0',
+        ]);
 
         $conta = Conta::where('conta_id', $request->conta_id)->first();
 
@@ -102,15 +105,10 @@ class ContaController extends Controller
 
         // $menorContaId = $menorContaIdNaoExistente->menor_conta_id ?? 1; // Se não encontrar nenhum valor, assume 1 como o menor valor possível
 
-        $menorContaIdExistente = Conta::min('conta_id');
-        $menorContaId = $menorContaIdExistente + 1;
-
-        while (Conta::where('conta_id', $menorContaId)->exists()) {
-            $menorContaId++;
-        }
+        $nextContaId = Conta::max('conta_id') + 1;
 
         $conta = new Conta([
-            'conta_id'  => $menorContaId,
+            'conta_id'  => $nextContaId,
             'saldo'     => 500.00
         ]);
 
