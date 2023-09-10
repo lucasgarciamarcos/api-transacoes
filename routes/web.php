@@ -17,7 +17,6 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->post('/list', 'ContaController@list');             // Lista que eu criei para orientação e visualização dos dados
 $router->post('/conta', 'ContaController@create');          // O endpoint "/conta" deve criar e fornecer informações sobre o número da conta e o saldo
 $router->get('/conta', 'ContaController@get');              // "
 $router->post('/quinhentos', 'ContaController@quinhentos'); // Crie um endpoint na API que permita a criação de uma nova conta com um saldo inicial de R$500.
