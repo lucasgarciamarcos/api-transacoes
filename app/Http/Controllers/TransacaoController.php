@@ -8,13 +8,15 @@ use App\Models\Conta;
 
 class TransacaoController extends Controller
 {
+    /**
+     * Cria uma nova transação.
+     *
+     * @param Request $request Os dados da requisição.
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request)
     {
-        $this->validate($request, [
-            'conta_id'          => 'required',
-            'valor'             => 'required|numeric',
-            'forma_pagamento'   => 'required|in:' . implode('.', Transacao::formasPagamento())
-        ]);
+        $this->validate($request, Transacao::getRules());
 
         $transacao = new Transacao($request->toArray());
 
@@ -24,7 +26,6 @@ class TransacaoController extends Controller
             return response()->json(['error' => 'Conta não encontrada'], 404);
         }
 
-        $conta = new Conta($conta->toArray());
         $conta->saldo = $conta->saldo - Transacao::aplicarTaxa($transacao->forma_pagamento, $transacao->valor);
 
         if ($conta->saldo < 0) {
@@ -36,8 +37,8 @@ class TransacaoController extends Controller
         }
 
         return response()->json([
-            'conta_id' => $conta->conta_id,
-            'saldo' => $conta->saldo
+            'conta_id'  => $conta->conta_id,
+            'saldo'     => number_format($conta->saldo, 2)
         ], 201);
     }
 }
